@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Suscripciones</h2>
+  <a href="{% url 'accounts:subscription_create' %}">Crear nueva suscripción</a>
+  <table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Programa</th>
+        <th>Fecha de suscripción</th>
+        <th>Fecha de vencimiento</th>
+        <th>Activa</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subscription in subscriptions %}
+        <tr>
+          <td>{{ subscription.user }}</td>
+          <td>{{ subscription.program }}</td>
+          <td>{{ subscription.subscription_date }}</td>
+          <td>{{ subscription.expiration_date }}</td>
+          <td>{% if subscription.is_active %}Sí{% else %}No{% endif %}</td>
+          <td>
+            <a href="{% url 'subscriptions:update' subscription.pk %}">Editar</a>
+            <a href="{% url 'subscriptions:delete' subscription.pk %}">Eliminar</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6">No hay suscripciones registradas.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
