@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Programas</h1>
+  <p><a href="{% url 'accounts:program_create' %}">Crear nuevo programa</a></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for program in programs %}
+        <tr>
+          <td>{{ program.name }}</td>
+          <td>{{ program.description }}</td>
+          <td>
+            <a href="{% url 'accounts:program_detail' program.id %}">Detalle</a> |
+            <a href="{% url 'accounts:program_update' program.id %}">Editar</a> |
+            <a href="{% url 'accounts:program_delete' program.id %}">Eliminar</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="3">No hay programas disponibles.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

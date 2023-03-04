@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Programa: {{ program.name }}</h1>
+  <p><a href="{% url 'program_list' %}">Volver al listado</a></p>
+  <p>{{ program.description }}</p>
+{% endblock %}
