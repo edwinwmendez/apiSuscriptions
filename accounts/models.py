@@ -123,18 +123,19 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
         if self.subscription_type == 'trial':
             self.price = 0
+            self.expiration_date = timezone.now() + timezone.timedelta(days=self.program.trial_days)
         else:
             if self.subscription_type == 'monthly':
                 self.price = self.program.monthly_price
+                self.expiration_date = timezone.now() + timezone.timedelta(days=30)
             elif self.subscription_type == 'annual':
                 self.price = self.program.annual_price
+                self.expiration_date = timezone.now() + timezone.timedelta(days=365)
             else:
                 self.price = self.program.permanent_price
+                self.expiration_date = None
 
             if self.subscription_type == 'annual' or self.subscription_type == 'permanent':
                 self.price = self.price - (self.price * self.program.discount_percentage / 100)
-
-        if not self.expiration_date:
-            self.expiration_date = timezone.now() + timezone.timedelta(days=self.program.trial_days) if self.subscription_type == 'trial' else timezone.now() + timezone.timedelta(days=30) if self.subscription_type == 'monthly' else timezone.now() + timezone.timedelta(days=365) if self.subscription_type == 'annual' else None
 
         super(Subscription, self).save(*args, **kwargs)
